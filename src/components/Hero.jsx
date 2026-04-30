@@ -88,7 +88,7 @@ export function Hero() {
             </div>
           </div>
 
-          <div className="absolute -bottom-6 -left-6 lg:-left-10 bg-[var(--lime)] text-[var(--ink)] rounded-2xl px-4 py-3 rotate-[-6deg] shadow-lg">
+          <div className="absolute -top-6 -left-6 lg:-left-10 bg-[var(--lime)] text-[var(--ink)] rounded-2xl px-4 py-3 rotate-[-6deg] shadow-lg">
             <div className="font-mono text-[10px] tracking-wider uppercase opacity-70">Zápis</div>
             <div className="font-display text-[18px] font-bold leading-tight">2–3 měsíce<br/>do řidičáku</div>
           </div>
