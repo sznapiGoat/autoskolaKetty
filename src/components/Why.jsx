@@ -12,7 +12,6 @@ const items = [
 const fleet = [
   { src: '/images/ketty2.jpg', name: 'Škoda Kamiq', tag: 'Skupina B', alt: 'Modrá Škoda Kamiq autoškoly KETTY' },
   { src: '/images/ketty3.jpeg', name: 'Opel Grandland', tag: 'Skupina B', alt: 'Bílý Opel Grandland autoškoly KETTY' },
-  { src: '/images/ketty4.jpg', name: 'Opel Mokka', tag: 'Skupina B', alt: 'Bílý Opel Mokka autoškoly KETTY' },
 ]
 
 export function Why() {
@@ -35,12 +34,10 @@ export function Why() {
         </div>
 
         <div className="grid md:grid-cols-12 gap-4 mb-4 reveal delay-1">
-          {fleet.map((f, i) => (
+          {fleet.map((f) => (
             <figure
               key={f.src}
-              className={`relative group overflow-hidden rounded-3xl bg-[var(--ink)] ${
-                i === 0 ? 'md:col-span-6 aspect-[16/10]' : 'md:col-span-3 aspect-[16/10] md:aspect-auto'
-              }`}
+              className="relative group overflow-hidden rounded-3xl bg-[var(--ink)] md:col-span-6 aspect-[16/10]"
             >
               <img
                 src={f.src}
@@ -48,9 +45,9 @@ export function Why() {
                 loading="lazy"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
-              <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[var(--ink)]/75 via-transparent to-transparent" />
-              <figcaption className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
-                <span className="font-display font-bold text-white text-[18px] leading-tight drop-shadow">{f.name}</span>
+              <div aria-hidden className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[var(--ink)]/90 via-[var(--ink)]/40 to-transparent" />
+              <figcaption className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-2">
+                <span className="font-display font-bold text-white text-[18px] leading-tight bg-[var(--ink)]/55 backdrop-blur-sm px-2.5 py-1 rounded-lg">{f.name}</span>
                 <span className="font-mono text-[10px] tracking-wider uppercase bg-[var(--lime)] text-[var(--ink)] px-2 py-1 rounded-full whitespace-nowrap">{f.tag}</span>
               </figcaption>
             </figure>
