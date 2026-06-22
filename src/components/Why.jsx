@@ -9,6 +9,12 @@ const items = [
   { Icon: BadgeCheck, title: 'Bez schovaných poplatků', desc: 'Cena, kterou vidíš, je cena, kterou platíš. Žádné dojíždění navíc.' },
 ]
 
+const fleet = [
+  { src: '/images/ketty2.jpg', name: 'Škoda Kamiq', tag: 'Skupina B', alt: 'Modrá Škoda Kamiq autoškoly KETTY' },
+  { src: '/images/ketty3.jpeg', name: 'Opel Grandland', tag: 'Skupina B', alt: 'Bílý Opel Grandland autoškoly KETTY' },
+  { src: '/images/ketty4.jpg', name: 'Opel Mokka', tag: 'Skupina B', alt: 'Bílý Opel Mokka autoškoly KETTY' },
+]
+
 export function Why() {
   return (
     <section id="proc" className="relative py-24 lg:py-32 bg-[var(--paper)]">
@@ -26,6 +32,29 @@ export function Why() {
               A&nbsp;naučili jsme se, že to nejdůležitější není auto, ale jak se v&nbsp;něm cítíš.
             </p>
           </div>
+        </div>
+
+        <div className="grid md:grid-cols-12 gap-4 mb-4 reveal delay-1">
+          {fleet.map((f, i) => (
+            <figure
+              key={f.src}
+              className={`relative group overflow-hidden rounded-3xl bg-[var(--ink)] ${
+                i === 0 ? 'md:col-span-6 aspect-[16/10]' : 'md:col-span-3 aspect-[16/10] md:aspect-auto'
+              }`}
+            >
+              <img
+                src={f.src}
+                alt={f.alt}
+                loading="lazy"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[var(--ink)]/75 via-transparent to-transparent" />
+              <figcaption className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
+                <span className="font-display font-bold text-white text-[18px] leading-tight drop-shadow">{f.name}</span>
+                <span className="font-mono text-[10px] tracking-wider uppercase bg-[var(--lime)] text-[var(--ink)] px-2 py-1 rounded-full whitespace-nowrap">{f.tag}</span>
+              </figcaption>
+            </figure>
+          ))}
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-black/10 border border-black/10 rounded-3xl overflow-hidden">

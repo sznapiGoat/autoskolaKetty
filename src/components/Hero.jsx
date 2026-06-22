@@ -49,7 +49,7 @@ export function Hero() {
 
         <div className="lg:col-span-5 reveal delay-2 relative">
           <div className="relative bg-[var(--ink)] rounded-[28px] p-7 text-white overflow-hidden">
-            <div className="flex items-start justify-between mb-12">
+            <div className="flex items-start justify-between mb-6">
               <div>
                 <div className="font-mono text-[10px] tracking-[0.2em] text-white/50 uppercase">Kurz · Skupina B</div>
                 <div className="font-display text-[34px] leading-none mt-1">Osobní<br/>automobil</div>
@@ -57,19 +57,17 @@ export function Hero() {
               <div className="bg-[var(--lime)] text-[var(--ink)] font-display font-bold text-[18px] px-3 py-1.5 rounded-lg rotate-3">B</div>
             </div>
 
-            <div className="relative h-[160px]">
-              <svg viewBox="0 0 400 160" className="absolute inset-0 w-full h-full" aria-hidden>
-                <rect x="40" y="80" width="320" height="40" rx="20" fill="#C7F23D"/>
-                <rect x="90" y="50" width="220" height="50" rx="22" fill="#C7F23D"/>
-                <rect x="115" y="60" width="80" height="32" rx="6" fill="#0B0B0A" opacity="0.85"/>
-                <rect x="205" y="60" width="80" height="32" rx="6" fill="#0B0B0A" opacity="0.85"/>
-                <circle cx="120" cy="125" r="22" fill="#0B0B0A"/>
-                <circle cx="120" cy="125" r="10" fill="#C7F23D"/>
-                <circle cx="280" cy="125" r="22" fill="#0B0B0A"/>
-                <circle cx="280" cy="125" r="10" fill="#C7F23D"/>
-                <rect x="40" y="100" width="6" height="14" rx="2" fill="#FAFAF7"/>
-                <rect x="354" y="100" width="6" height="14" rx="2" fill="#FAFAF7"/>
-              </svg>
+            <div className="relative rounded-2xl overflow-hidden aspect-[4/3] ring-1 ring-white/10">
+              <img
+                src="/images/ketty1.jpg"
+                alt="Cvičné vozidlo Autoškoly KETTY"
+                loading="eager"
+                className="w-full h-full object-cover"
+              />
+              <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[var(--ink)]/60 via-transparent to-transparent" />
+              <div className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 bg-[var(--lime)] text-[var(--ink)] font-mono text-[10px] tracking-wider uppercase px-2.5 py-1 rounded-full">
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--ink)]" /> Naše vozidlo
+              </div>
             </div>
 
             <div
