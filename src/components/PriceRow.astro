@@ -1,0 +1,18 @@
+---
+interface Props {
+  label: string
+  price: string
+  note?: string
+  accent?: boolean
+}
+
+const { label, price, note, accent = false } = Astro.props
+---
+
+<div class:list={['flex items-baseline justify-between py-3 border-b last:border-b-0', accent ? 'border-[var(--ink)]/12' : 'border-black/[0.07]']}>
+  <span class:list={['text-[14px] leading-snug max-w-[60%]', accent ? 'text-[var(--ink)]/80' : 'text-black/70']}>{label}</span>
+  <div class="text-right shrink-0 ml-4">
+    <span class="font-display font-bold text-[18px] whitespace-nowrap">{price}</span>
+    {note && <div class:list={['text-[12px]', accent ? 'text-[var(--ink)]/60' : 'text-black/50']}>{note}</div>}
+  </div>
+</div>

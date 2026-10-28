@@ -1,0 +1,21 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import Breadcrumbs from '../../components/Breadcrumbs.astro'
+import Courses from '../../components/Courses.astro'
+import Why from '../../components/Why.astro'
+import CtaBand from '../../components/CtaBand.astro'
+---
+
+<Layout
+  title="Kurzy autoškoly: B, A, C+E a vrácení ŘP | Autoškola KETTY"
+  description="Přehled kurzů Autoškoly KETTY: řidičák skupiny B, motorka A1/A2/A, nákladní C+E a vrácení řidičáku dle § 39. Praha 8 a Chotusice u Čáslavi."
+>
+  <div class="[&>section]:pt-12 lg:[&>section]:pt-16 pt-[104px] lg:pt-[120px] bg-[var(--paper-2)] grain">
+    <div class="max-w-7xl mx-auto px-5 lg:px-10">
+      <div class="enter"><Breadcrumbs items={[{ label: 'Kurzy' }]} /></div>
+    </div>
+    <Courses as="h1" />
+  </div>
+  <Why />
+  <CtaBand />
+</Layout>

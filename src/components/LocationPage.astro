@@ -1,0 +1,131 @@
+---
+import { ArrowRight, ArrowUpRight, MapPin, Clock, Phone } from '@lucide/astro'
+import Layout from '../layouts/Layout.astro'
+import Breadcrumbs from './Breadcrumbs.astro'
+import PriceRow from './PriceRow.astro'
+import CtaBand from './CtaBand.astro'
+import Stars from './Stars.astro'
+import { courses } from '../data/courses'
+import { locations, type Location } from '../data/locations'
+import { site } from '../data/site'
+
+interface Props {
+  location: Location
+}
+
+const { location: loc } = Astro.props
+const other = locations.find((l) => l.slug !== loc.slug)!
+const accent = loc.slug !== 'praha-8'
+---
+
+<Layout title={loc.seoTitle} description={loc.description}>
+  <section class="relative pt-[104px] lg:pt-[120px] pb-20 lg:pb-28">
+    <div class="max-w-7xl mx-auto px-5 lg:px-10">
+      <div class="enter" style="--i:0"><Breadcrumbs items={[{ label: 'Pobočky' }, { label: loc.name }]} /></div>
+
+      <div class="mt-10 grid lg:grid-cols-12 gap-12 lg:gap-10 items-start">
+        <div class="lg:col-span-7">
+          <h1 class="enter font-display font-bold leading-[0.95] tracking-tight text-[clamp(44px,6.4vw,92px)]" style="--i:1">
+            Autoškola<br />{loc.heading}
+          </h1>
+          <p class="enter mt-7 max-w-[36rem] text-[17px] lg:text-[19px] text-black/70 leading-relaxed" style="--i:2">{loc.intro}</p>
+          <div class="enter mt-9 flex flex-wrap items-center gap-3" style="--i:3">
+            <a href="/kontakt#prihlaska" class="btn-primary inline-flex items-center gap-2 bg-[var(--ink)] text-[var(--lime)] font-semibold text-[15px] px-7 py-4 rounded-full">
+              Zapsat se <ArrowRight size={17} />
+            </a>
+            <a href={loc.mapsUrl} target="_blank" rel="noopener" class="btn-secondary inline-flex items-center gap-2 text-[15px] font-semibold px-6 py-4 rounded-full border-2 border-[var(--ink)]/15 hover:border-[var(--ink)] hover:bg-white">
+              Navigovat <ArrowUpRight size={16} />
+            </a>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 enter" style="--i:3">
+          <div class="bg-[var(--ink)] text-white rounded-[28px] p-8 grid gap-6">
+            <div class="flex gap-4">
+              <MapPin size={18} class="text-[var(--lime)] mt-0.5 shrink-0" />
+              <div>
+                <div class="text-[13px] text-white/50 mb-0.5">{loc.role}</div>
+                <div class="text-[16px] leading-snug">{loc.address[0]}<br />{loc.address[1]}</div>
+                {loc.address[2] && <div class="text-[13px] text-white/60 mt-0.5">{loc.address[2]}</div>}
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <Clock size={18} class="text-[var(--lime)] mt-0.5 shrink-0" />
+              <div>
+                <div class="text-[13px] text-white/50 mb-0.5">Kdy nás zastihneš</div>
+                <div class="text-[16px] leading-snug">{loc.hours[0]}</div>
+                <div class="text-[13px] text-white/60 mt-0.5">{loc.hours[1]}</div>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <Phone size={18} class="text-[var(--lime)] mt-0.5 shrink-0" />
+              <div>
+                <div class="text-[13px] text-white/50 mb-0.5">Telefon</div>
+                <a href={site.phone.href} class="ulink text-[16px]">{site.phone.display}</a>
+              </div>
+            </div>
+            <a href={site.googleReviewsUrl} target="_blank" rel="noopener" class="group pt-6 border-t border-white/10 flex items-center gap-3">
+              <Stars size={14} class="text-[var(--lime)]" fill="fill-[var(--lime)]" />
+              <span class="text-[14px] text-white/70 group-hover:text-white transition-colors">{site.rating.value} z 5 na Google</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pb-20 lg:pb-28">
+    <div class="max-w-7xl mx-auto px-5 lg:px-10">
+      <div class="reveal rounded-[32px] overflow-hidden border border-black/10 bg-white">
+        <iframe
+          title={`Mapa: ${loc.address[0]}, ${loc.address[1]}`}
+          src={`https://www.google.com/maps?q=${loc.embedQuery}&z=15&output=embed`}
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          class="block w-full h-[360px] lg:h-[460px] border-0 grayscale-[0.4]"
+        ></iframe>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-20 lg:py-28 bg-[var(--paper-2)] grain">
+    <div class="max-w-7xl mx-auto px-5 lg:px-10 grid lg:grid-cols-12 gap-12 lg:gap-16">
+      <div class="lg:col-span-5 reveal">
+        <h2 class="font-display font-bold text-[clamp(36px,4.4vw,60px)] leading-[0.95] tracking-tight">Co tu nabízíme</h2>
+        <div class="mt-6 grid gap-4 max-w-[60ch] text-[16px] text-black/70 leading-relaxed">
+          {loc.about.map((p) => <p>{p}</p>)}
+        </div>
+        <a href="/cenik" class="mt-8 inline-flex items-center gap-2 font-semibold text-[15px] ulink">Kompletní ceník <ArrowRight size={15} /></a>
+      </div>
+      <div class:list={['lg:col-span-7 reveal delay-1 rounded-3xl p-8', accent ? 'bg-[var(--lime)]' : 'bg-white border border-black/10']}>
+        <h3 class="font-display text-[26px] font-bold leading-none mb-5">{loc.regionLabel}</h3>
+        {loc.pricing.rows.map((row) => <PriceRow {...row} accent={accent} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-20 lg:py-28">
+    <div class="max-w-7xl mx-auto px-5 lg:px-10">
+      <h2 class="reveal font-display font-bold text-[clamp(36px,4.4vw,60px)] leading-[0.95] tracking-tight">Kurzy</h2>
+      <ul class="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {courses.map((c, i) => (
+          <li class={`reveal delay-${i + 1}`}>
+            <a href={c.href} class="group h-full flex flex-col rounded-3xl bg-white border border-black/10 p-6 hover:border-[var(--ink)] transition-colors">
+              <span class="self-start font-display font-bold text-[18px] h-11 min-w-11 px-2 rounded-xl bg-[var(--ink)] text-[var(--lime)] flex items-center justify-center">{c.tag}</span>
+              <span class="mt-8 font-display font-bold text-[22px] leading-tight">{c.title}</span>
+              <span class="mt-auto pt-4 flex items-center justify-between text-[14px] text-black/60">
+                od {c.price} Kč
+                <ArrowUpRight size={18} class="text-[var(--ink)] transition-transform duration-300 group-hover:rotate-45" />
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="reveal mt-8 text-[15px] text-black/65">
+        Hledáš druhou pobočku? <a href={other.href} class="font-semibold text-[var(--ink)] underline underline-offset-4 decoration-black/25 hover:decoration-black">Autoškola {other.name}</a>
+      </p>
+    </div>
+  </section>
+
+  <CtaBand />
+</Layout>

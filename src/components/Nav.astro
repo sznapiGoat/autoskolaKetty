@@ -1,0 +1,215 @@
+---
+import { Phone, ArrowRight, ArrowUpRight, X, Menu, ChevronDown, MapPin } from '@lucide/astro'
+import { site } from '../data/site'
+import { courses } from '../data/courses'
+import { locations } from '../data/locations'
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/'
+const isHome = path === '/'
+const contactHref = isHome ? '#kontakt' : '/kontakt'
+const isCurrent = (href: string) => path === href
+const inCourses = path.startsWith('/kurzy') || path === '/vraceni-ridicaku'
+const inLocations = locations.some((l) => l.href === path)
+
+const plainLinks = [
+  { href: '/cenik', label: 'Ceník' },
+  { href: '/#recenze', label: 'Recenze' },
+  { href: '/kontakt', label: 'Kontakt' },
+]
+---
+
+<div id="nav-sentinel" aria-hidden="true" class="absolute top-0 h-4 w-px"></div>
+
+<header id="site-nav" class="site-nav fixed top-0 inset-x-0 z-50 border-b border-transparent transition-colors duration-300 data-[scrolled]:bg-[#FAFAF7]/90 data-[scrolled]:backdrop-blur-md data-[scrolled]:border-black/5 data-[menu-open]:bg-[#FAFAF7]">
+  <div class="max-w-7xl mx-auto px-5 lg:px-10 h-[72px] flex items-center justify-between">
+    <a href="/" class="flex items-center gap-2.5" aria-label="Autoškola KETTY, úvodní stránka">
+      <div class="w-9 h-9 rounded-xl bg-[var(--ink)] flex items-center justify-center">
+        <span class="font-display font-bold text-[var(--lime)] text-[17px] leading-none -mt-0.5">K</span>
+      </div>
+      <div class="leading-tight">
+        <div class="font-display font-bold text-[17px] tracking-tight">KETTY</div>
+        <div class="text-[12px] text-black/55">Autoškola</div>
+      </div>
+    </a>
+
+    <nav class="hidden lg:flex items-center gap-7" aria-label="Hlavní navigace">
+      <!-- Kurzy -->
+      <div class="dd relative">
+        <button type="button" class="dd-btn flex items-center gap-1 text-[14px] font-medium text-black/70 hover:text-black aria-expanded:text-black data-[current]:text-black" aria-expanded="false" aria-controls="dd-kurzy" data-current={inCourses ? '' : undefined}>
+          Kurzy <ChevronDown size={15} class="dd-chevron transition-transform duration-300" />
+        </button>
+        <div id="dd-kurzy" class="dd-panel absolute left-1/2 top-full pt-4 w-[600px]">
+          <div class="rounded-3xl bg-white border border-black/10 p-3 shadow-[0_24px_60px_-20px_rgba(11,11,10,0.25)]">
+            <ul class="grid grid-cols-2 gap-1">
+              {courses.map((c) => (
+                <li>
+                  <a href={c.href} aria-current={isCurrent(c.href) ? 'page' : undefined} class="group flex gap-3.5 rounded-2xl p-3.5 hover:bg-[var(--paper-2)] aria-[current=page]:bg-[var(--paper-2)] transition-colors">
+                    <span class="font-display font-bold text-[15px] h-10 min-w-10 px-2 rounded-lg bg-[var(--ink)] text-[var(--lime)] flex items-center justify-center shrink-0">{c.tag}</span>
+                    <span>
+                      <span class="block font-semibold text-[15px] leading-tight">{c.title}</span>
+                      <span class="block text-[13px] text-black/55 mt-1">od {c.price} Kč, {c.duration}</span>
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <div class="mt-2 flex items-center justify-between rounded-2xl bg-[var(--paper-2)] px-4 py-3 text-[14px]">
+              <a href="/kurzy" class="ulink font-semibold inline-flex items-center gap-1.5">Všechny kurzy <ArrowRight size={14} /></a>
+              <a href="/cenik" class="ulink text-black/65 hover:text-black">Kompletní ceník</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pobočky -->
+      <div class="dd relative">
+        <button type="button" class="dd-btn flex items-center gap-1 text-[14px] font-medium text-black/70 hover:text-black aria-expanded:text-black data-[current]:text-black" aria-expanded="false" aria-controls="dd-pobocky" data-current={inLocations ? '' : undefined}>
+          Pobočky <ChevronDown size={15} class="dd-chevron transition-transform duration-300" />
+        </button>
+        <div id="dd-pobocky" class="dd-panel absolute left-1/2 top-full pt-4 w-[360px]">
+          <ul class="rounded-3xl bg-white border border-black/10 p-3 shadow-[0_24px_60px_-20px_rgba(11,11,10,0.25)]">
+            {locations.map((l) => (
+              <li>
+                <a href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined} class="flex gap-3.5 rounded-2xl p-3.5 hover:bg-[var(--paper-2)] aria-[current=page]:bg-[var(--paper-2)] transition-colors">
+                  <span class="h-10 w-10 rounded-lg bg-[var(--lime)] flex items-center justify-center shrink-0"><MapPin size={17} /></span>
+                  <span>
+                    <span class="block font-semibold text-[15px] leading-tight">{l.name}</span>
+                    <span class="block text-[13px] text-black/55 mt-1">{l.address[0]}, {l.role.toLowerCase()}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {plainLinks.map((l) => (
+        <a href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined} class="ulink text-[14px] font-medium text-black/70 hover:text-black aria-[current=page]:text-black">{l.label}</a>
+      ))}
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a href={site.phone.href} class="hidden md:flex items-center gap-2 text-[14px] font-medium text-black/70 hover:text-black">
+        <Phone size={14} /> {site.phone.display}
+      </a>
+      <a href={contactHref} class="hidden sm:inline-flex btn-primary items-center gap-1.5 bg-[var(--ink)] text-[var(--lime)] font-semibold text-[14px] px-5 py-2.5 rounded-full">
+        Zapsat se <ArrowRight size={15} />
+      </a>
+      <button
+        id="menu-toggle"
+        type="button"
+        class="lg:hidden w-10 h-10 rounded-full bg-[var(--ink)] text-[var(--lime)] flex items-center justify-center"
+        aria-label="Otevřít menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <Menu size={18} class="icon-open" />
+        <X size={18} class="icon-close hidden" />
+      </button>
+    </div>
+  </div>
+
+  <div id="mobile-menu" class="lg:hidden bg-[#FAFAF7] border-t border-black/5 max-h-[calc(100dvh-72px)] overflow-y-auto" hidden>
+    <div class="px-5 py-5 flex flex-col gap-6">
+      <div>
+        <div class="text-[13px] text-black/55 mb-2">Kurzy</div>
+        <ul class="grid gap-1">
+          {courses.map((c) => (
+            <li>
+              <a href={c.href} aria-current={isCurrent(c.href) ? 'page' : undefined} class="flex items-center gap-3 rounded-2xl p-2.5 -mx-2.5 aria-[current=page]:bg-[var(--paper-2)]">
+                <span class="font-display font-bold text-[14px] h-9 min-w-9 px-1.5 rounded-lg bg-[var(--ink)] text-[var(--lime)] flex items-center justify-center">{c.tag}</span>
+                <span class="font-medium text-[16px]">{c.title}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <div class="text-[13px] text-black/55 mb-2">Pobočky</div>
+        <ul class="grid gap-1">
+          {locations.map((l) => (
+            <li>
+              <a href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined} class="flex items-center gap-3 rounded-2xl p-2.5 -mx-2.5 aria-[current=page]:bg-[var(--paper-2)]">
+                <span class="h-9 w-9 rounded-lg bg-[var(--lime)] flex items-center justify-center"><MapPin size={16} /></span>
+                <span class="font-medium text-[16px]">{l.name}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <ul class="border-t border-black/10 pt-2">
+        {[{ href: '/kurzy', label: 'Všechny kurzy' }, ...plainLinks].map((l) => (
+          <li>
+            <a href={l.href} class="mobile-link flex items-center justify-between py-3 text-[16px] font-medium border-b border-black/5">
+              {l.label} <ArrowUpRight size={16} class="text-black/40" />
+            </a>
+          </li>
+        ))}
+      </ul>
+      <div class="grid grid-cols-2 gap-2">
+        <a href={site.phone.href} class="inline-flex justify-center items-center gap-1.5 border-2 border-[var(--ink)]/15 font-semibold py-3 rounded-full">
+          <Phone size={15} /> Zavolat
+        </a>
+        <a href={contactHref} class="mobile-link inline-flex justify-center items-center gap-1.5 bg-[var(--ink)] text-[var(--lime)] font-semibold py-3 rounded-full">
+          Zapsat se <ArrowRight size={16} />
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  const nav = document.getElementById('site-nav')!
+  const sentinel = document.getElementById('nav-sentinel')!
+  const toggle = document.getElementById('menu-toggle')!
+  const menu = document.getElementById('mobile-menu')!
+
+  // Pozadí navigace po odscrollování: sentinel místo scroll listeneru
+  new IntersectionObserver(([e]) => {
+    nav.toggleAttribute('data-scrolled', !e.isIntersecting)
+  }).observe(sentinel)
+
+  // Mobilní menu
+  const setMenu = (open: boolean) => {
+    menu.hidden = !open
+    toggle.setAttribute('aria-expanded', String(open))
+    toggle.setAttribute('aria-label', open ? 'Zavřít menu' : 'Otevřít menu')
+    toggle.querySelector('.icon-open')!.classList.toggle('hidden', open)
+    toggle.querySelector('.icon-close')!.classList.toggle('hidden', !open)
+    nav.toggleAttribute('data-menu-open', open)
+  }
+  toggle.addEventListener('click', () => setMenu(menu.hidden))
+  menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)))
+
+  // Rozbalovací nabídky: hover řeší CSS, klik a klávesnici tenhle skript
+  const dds = [...document.querySelectorAll<HTMLElement>('.dd')]
+  const setDd = (dd: HTMLElement, open: boolean) => {
+    dd.toggleAttribute('data-open', open)
+    dd.querySelector('.dd-btn')!.setAttribute('aria-expanded', String(open))
+  }
+  dds.forEach((dd) => {
+    const btn = dd.querySelector<HTMLButtonElement>('.dd-btn')!
+    btn.addEventListener('click', () => {
+      const open = !dd.hasAttribute('data-open')
+      dds.forEach((other) => other !== dd && setDd(other, false))
+      setDd(dd, open)
+    })
+    dd.addEventListener('focusout', (e) => {
+      if (!dd.contains(e.relatedTarget as Node)) setDd(dd, false)
+    })
+    dd.addEventListener('mouseleave', () => setDd(dd, false))
+  })
+  document.addEventListener('click', (e) => {
+    dds.forEach((dd) => !dd.contains(e.target as Node) && setDd(dd, false))
+  })
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return
+    setMenu(false)
+    dds.forEach((dd) => {
+      if (dd.hasAttribute('data-open')) {
+        setDd(dd, false)
+        dd.querySelector<HTMLButtonElement>('.dd-btn')!.focus()
+      }
+    })
+  })
+</script>

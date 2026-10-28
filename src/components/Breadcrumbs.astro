@@ -1,0 +1,25 @@
+---
+import { ChevronRight } from '@lucide/astro'
+
+interface Props {
+  items: { label: string; href?: string }[]
+}
+
+const { items } = Astro.props
+const all = [{ label: 'Úvod', href: '/' }, ...items]
+---
+
+<nav aria-label="Drobečková navigace" class="text-[13px] text-black/55">
+  <ol class="flex flex-wrap items-center gap-1.5">
+    {all.map((it, i) => (
+      <li class="flex items-center gap-1.5">
+        {i > 0 && <ChevronRight size={13} aria-hidden="true" class="text-black/35" />}
+        {i === all.length - 1
+          ? <span aria-current="page" class="text-black font-medium">{it.label}</span>
+          : it.href
+            ? <a href={it.href} class="hover:text-black underline-offset-4 hover:underline">{it.label}</a>
+            : <span>{it.label}</span>}
+      </li>
+    ))}
+  </ol>
+</nav>

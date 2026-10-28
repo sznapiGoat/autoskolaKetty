@@ -1,0 +1,184 @@
+---
+import { Image } from 'astro:assets'
+import { ArrowRight, Check, ArrowUpRight } from '@lucide/astro'
+import Layout from '../layouts/Layout.astro'
+import Breadcrumbs from './Breadcrumbs.astro'
+import PriceRow from './PriceRow.astro'
+import Faq from './Faq.astro'
+import CtaBand from './CtaBand.astro'
+import { courses, type Course } from '../data/courses'
+import heroCar from '../assets/images/ketty1.jpg'
+
+interface Props {
+  course: Course
+}
+
+const { course } = Astro.props
+const signupHref = `/kontakt?kurz=${encodeURIComponent(course.tag)}#prihlaska`
+const others = courses.filter((c) => c.slug !== course.slug)
+const crumbs = course.href.startsWith('/kurzy/')
+  ? [{ label: 'Kurzy', href: '/kurzy' }, { label: course.title }]
+  : [{ label: course.title }]
+---
+
+<Layout title={course.seoTitle} description={course.description}>
+  <!-- Úvod kurzu -->
+  <section class="relative pt-[104px] lg:pt-[120px] pb-20 lg:pb-28 overflow-hidden">
+    <div class="relative max-w-7xl mx-auto px-5 lg:px-10">
+      <div class="enter" style="--i:0"><Breadcrumbs items={crumbs} /></div>
+
+      <div class="mt-10 grid lg:grid-cols-12 gap-12 lg:gap-10 items-center">
+        <div class="lg:col-span-7">
+          <h1 class="enter font-display font-bold leading-[0.95] tracking-tight text-[clamp(44px,6.4vw,92px)]" style="--i:1">
+            {course.title}
+          </h1>
+          <p class="enter mt-7 max-w-[36rem] text-[17px] lg:text-[19px] text-black/70 leading-relaxed" style="--i:2">{course.intro}</p>
+          <div class="enter mt-9 flex flex-wrap items-center gap-3" style="--i:3">
+            <a href={signupHref} class="btn-primary inline-flex items-center gap-2 bg-[var(--ink)] text-[var(--lime)] font-semibold text-[15px] px-7 py-4 rounded-full">
+              Zapsat se <ArrowRight size={17} />
+            </a>
+            <a href="#ceny-kurzu" class="btn-secondary inline-flex items-center gap-2 text-[15px] font-semibold px-6 py-4 rounded-full border-2 border-[var(--ink)]/15 hover:border-[var(--ink)] hover:bg-white">
+              Ceny kurzu
+            </a>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 enter" style="--i:3">
+          <div class="bg-[var(--ink)] text-white rounded-[28px] p-7">
+            {course.slug === 'skupina-b' ? (
+              <div class="rounded-2xl overflow-hidden aspect-[4/3] ring-1 ring-white/10">
+                <Image
+                  src={heroCar}
+                  alt="Červený Ford Focus Autoškoly KETTY s polepem a telefonním číslem"
+                  widths={[400, 600, 800, 960]}
+                  sizes="(min-width: 1024px) 460px, calc(100vw - 96px)"
+                  loading="eager"
+                  fetchpriority="high"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+            ) : (
+              <div class="rounded-2xl bg-[var(--lime)] text-[var(--ink)] aspect-[4/3] flex items-center justify-center">
+                <span class="font-display font-bold text-[clamp(96px,14vw,180px)] leading-none tracking-tight">{course.tag}</span>
+              </div>
+            )}
+
+            <div aria-hidden="true" class="mt-6 road-stripe-light"></div>
+
+            <dl class="mt-6 grid grid-cols-3 gap-4">
+              <div>
+                <dt class="text-[13px] text-white/50">Délka</dt>
+                <dd class="mt-1 font-semibold text-[16px]">{course.duration}</dd>
+              </div>
+              <div>
+                <dt class="text-[13px] text-white/50">Rozsah</dt>
+                <dd class="mt-1 font-semibold text-[16px]">{course.lessons}</dd>
+              </div>
+              <div>
+                <dt class="text-[13px] text-white/50">Cena od</dt>
+                <dd class="mt-1 font-display font-bold text-[22px] leading-none">{course.price} <span class="text-[13px] font-medium text-white/60">Kč</span></dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Podmínky a co je v ceně -->
+  <section class="py-20 lg:py-28 bg-[var(--paper-2)] grain">
+    <div class="max-w-7xl mx-auto px-5 lg:px-10 grid lg:grid-cols-2 gap-12 lg:gap-20">
+      <div class="reveal">
+        <h2 class="font-display font-bold text-[clamp(32px,3.6vw,48px)] leading-[1] tracking-tight">Co potřebuješ</h2>
+        <ul class="mt-8 grid gap-4">
+          {course.requirements.map((r) => (
+            <li class="flex gap-3 text-[16px] leading-relaxed">
+              <span class="mt-0.5 w-6 h-6 rounded-full bg-[var(--ink)] text-[var(--lime)] flex items-center justify-center shrink-0"><Check size={14} stroke-width={3} /></span>
+              {r}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div class="reveal delay-1 rounded-3xl bg-[var(--lime)] p-8 lg:p-10">
+        <h2 class="font-display font-bold text-[clamp(32px,3.6vw,48px)] leading-[1] tracking-tight">Co je v ceně</h2>
+        <ul class="mt-8 grid gap-4">
+          {course.included.map((r) => (
+            <li class="flex gap-3 text-[16px] leading-relaxed">
+              <span class="mt-0.5 w-6 h-6 rounded-full bg-[var(--ink)] text-[var(--lime)] flex items-center justify-center shrink-0"><Check size={14} stroke-width={3} /></span>
+              {r}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Průběh -->
+  <section class="py-20 lg:py-28">
+    <div class="max-w-7xl mx-auto px-5 lg:px-10">
+      <h2 class="reveal font-display font-bold text-[clamp(40px,5vw,68px)] leading-[0.95] tracking-tight max-w-2xl">Jak to probíhá</h2>
+      <ol class="mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
+        {course.steps.map((s, i) => (
+          <li class={`reveal delay-${i + 1} step`}>
+            <!-- Linka se při odhalení postupně vybarví, ať je vidět pořadí kroků -->
+            <div class="relative h-[3px] bg-black/10 rounded-full overflow-hidden">
+              <div class="step-fill absolute inset-0 bg-[var(--ink)]"></div>
+            </div>
+            <h3 class="mt-6 font-display font-bold text-[24px] leading-tight">{s.title}</h3>
+            <p class="mt-3 text-[15px] text-black/65 leading-relaxed">{s.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- Ceny -->
+  <section id="ceny-kurzu" class="py-20 lg:py-28 bg-[var(--paper-2)] grain scroll-mt-20">
+    <div class="max-w-7xl mx-auto px-5 lg:px-10">
+      <div class="reveal flex flex-wrap items-end justify-between gap-6 mb-12">
+        <h2 class="font-display font-bold text-[clamp(40px,5vw,68px)] leading-[0.95] tracking-tight">Ceny kurzu</h2>
+        <a href="/cenik" class="inline-flex items-center gap-2 font-semibold text-[15px] ulink">Kompletní ceník <ArrowRight size={15} /></a>
+      </div>
+      <div class:list={['grid gap-5', course.prices.length > 1 && 'md:grid-cols-2']}>
+        {course.prices.map((p, i) => (
+          <div class:list={[`reveal delay-${i + 1} rounded-3xl p-8`, i === 1 ? 'bg-[var(--lime)]' : 'bg-white border border-black/10', course.prices.length === 1 && 'max-w-2xl']}>
+            <h3 class="font-display text-[26px] font-bold leading-none mb-5">{p.title}</h3>
+            {p.rows.map((row) => <PriceRow {...row} accent={i === 1} />)}
+          </div>
+        ))}
+      </div>
+      <p class="reveal mt-6 text-[14px] text-black/60">Ceny vč. 21&nbsp;% DPH. Splátky se zálohou od&nbsp;3&nbsp;000&nbsp;Kč.</p>
+    </div>
+  </section>
+
+  <!-- Otázky -->
+  <section class="py-20 lg:py-28">
+    <div class="max-w-7xl mx-auto px-5 lg:px-10 grid lg:grid-cols-12 gap-10">
+      <h2 class="reveal lg:col-span-4 font-display font-bold text-[clamp(40px,5vw,68px)] leading-[0.95] tracking-tight">Časté otázky</h2>
+      <div class="reveal delay-1 lg:col-span-8"><Faq items={course.faq} /></div>
+    </div>
+  </section>
+
+  <!-- Další kurzy -->
+  <section class="pb-4">
+    <div class="max-w-7xl mx-auto px-5 lg:px-10">
+      <h2 class="reveal font-display font-bold text-[28px] leading-tight">Další kurzy</h2>
+      <ul class="mt-6 grid sm:grid-cols-3 gap-4">
+        {others.map((c, i) => (
+          <li class={`reveal delay-${i + 1}`}>
+            <a href={c.href} class="group flex items-center gap-4 rounded-3xl bg-white border border-black/10 p-5 hover:border-[var(--ink)] transition-colors">
+              <span class="font-display font-bold text-[18px] h-12 min-w-12 px-2 rounded-xl bg-[var(--ink)] text-[var(--lime)] flex items-center justify-center">{c.tag}</span>
+              <span class="flex-1">
+                <span class="block font-semibold text-[16px] leading-tight">{c.title}</span>
+                <span class="block text-[13px] text-black/55 mt-1">od {c.price} Kč</span>
+              </span>
+              <ArrowUpRight size={18} class="transition-transform duration-300 group-hover:rotate-45" />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand href={signupHref} />
+</Layout>

@@ -1,0 +1,66 @@
+---
+import { Image } from 'astro:assets'
+import { GraduationCap, Car, TrendingUp, CalendarClock, MapPin, BadgeCheck } from '@lucide/astro'
+import kamiq from '../assets/images/ketty2.jpg'
+import grandland from '../assets/images/ketty3.jpeg'
+
+const items = [
+  { Icon: GraduationCap, title: 'Zkušení instruktoři', desc: 'Trpěliví profíci s 10+ lety praxe. Učíme jezdit, ne jen projít zkoušku.' },
+  { Icon: Car, title: 'Moderní vozový park', desc: 'Ford Focus, Škoda Kamiq, Opel Grandland. Manuál i automat.' },
+  { Icon: TrendingUp, title: '94 % úspěšnost', desc: 'Připravíme tě tak, aby zkouška byla formalita. Statistika za 2024-2025.' },
+  { Icon: CalendarClock, title: 'Flexibilní rozvrh', desc: 'Jezdíš, kdy se ti hodí, i o víkendech a večer. Termíny domluvíš po telefonu.' },
+  { Icon: MapPin, title: 'Praha a Čáslavsko', desc: 'Učebna v Dolních Chabrech, pobočka v Chotusicích u Čáslavi.' },
+  { Icon: BadgeCheck, title: 'Bez schovaných poplatků', desc: 'Cena, kterou vidíš, je cena, kterou platíš. Žádné dojíždění navíc.' },
+]
+
+const fleet = [
+  { src: kamiq, name: 'Škoda Kamiq', alt: 'Modrá Škoda Kamiq na polní cestě', ratio: 'aspect-[4/3]' },
+  { src: grandland, name: 'Opel Grandland', alt: 'Bílý Opel Grandland zepředu', ratio: 'aspect-[16/10]' },
+]
+---
+
+<section id="proc" class="relative py-24 lg:py-32 bg-[var(--paper)]">
+  <div class="max-w-7xl mx-auto px-5 lg:px-10">
+    <div class="reveal max-w-3xl mb-16">
+      <h2 class="font-display font-bold text-[clamp(40px,5.5vw,76px)] leading-[0.95] tracking-tight">
+        Šest důvodů, proč si vybrat <span class="bg-[var(--lime)] px-2 -mx-1 rounded">nás</span>.
+      </h2>
+      <p class="mt-6 max-w-[60ch] text-[17px] text-black/70 leading-relaxed">
+        Jezdíme od&nbsp;roku 1998, od&nbsp;trabantů po&nbsp;elektromobily. Nejdůležitější není auto, ale jak se v&nbsp;něm cítíš.
+      </p>
+    </div>
+
+    <div class="grid lg:grid-cols-12 gap-12 lg:gap-16">
+      <div class="lg:col-span-5 grid sm:grid-cols-2 lg:grid-cols-1 gap-8">
+        {fleet.map((f, i) => (
+          <figure class:list={[`reveal delay-${i + 1}`, i === 1 && 'lg:ml-16']}>
+            <div class={`zoom-img overflow-hidden rounded-3xl bg-[var(--paper-2)] ${f.ratio}`}>
+              <Image
+                src={f.src}
+                alt={f.alt}
+                widths={[480, 720, 960]}
+                sizes="(min-width: 1024px) 460px, (min-width: 640px) 50vw, calc(100vw - 40px)"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <figcaption class="mt-3 text-[14px] text-black/60">
+              <span class="font-semibold text-[var(--ink)]">{f.name}</span>, výcvik skupiny B
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+
+      <div class="lg:col-span-7 lg:sticky lg:top-28 lg:self-start grid sm:grid-cols-2 gap-x-10 gap-y-10 lg:gap-y-14 content-start">
+        {items.map(({ Icon, title, desc }, i) => (
+          <div class={`reveal delay-${(i % 2) + 1} border-t-2 border-[var(--ink)] pt-6`}>
+            <div class="flex items-center gap-3">
+              <Icon size={20} stroke-width={2} class="text-[var(--ink)] shrink-0" />
+              <h3 class="font-display font-bold text-[22px] leading-tight">{title}</h3>
+            </div>
+            <p class="mt-3 text-[15px] text-black/65 leading-relaxed">{desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

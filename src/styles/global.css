@@ -1,0 +1,147 @@
+@import '@fontsource-variable/geist';
+@import 'tailwindcss';
+
+/* Bricolage Grotesque: vlastní podmnožina se zafixovanou šířkou 90 % (fonttools instancer),
+   proměnná tloušťka 400-800 a optická velikost. Druhý soubor nese jen česká písmena s háčky. */
+@font-face {
+  font-family: 'Bricolage Grotesque Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400 800;
+  src: url('../assets/fonts/bricolage-latin-w90.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Bricolage Grotesque Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400 800;
+  src: url('../assets/fonts/bricolage-cz-w90.woff2') format('woff2-variations');
+  unicode-range: U+010C-010F,U+011A-011B,U+0147-0148,U+0158-0159,U+0160-0161,U+0164-0165,U+016E-016F,U+017D-017E;
+}
+
+@theme {
+  --font-sans: 'Geist Variable', system-ui, sans-serif;
+  --font-display: 'Bricolage Grotesque Variable', 'Geist Variable', sans-serif;
+}
+
+:root {
+  --ink: #0B0B0A;
+  --paper: #FAFAF7;
+  --paper-2: #F1F1EC;
+  --lime: #C7F23D;
+  --lime-deep: #9BC91A;
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+}
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  html, body { background: var(--paper); color: var(--ink); }
+  body { -webkit-font-smoothing: antialiased; }
+  section[id] { scroll-margin-top: 72px; }
+  button { cursor: pointer; }
+  ::selection { background: var(--lime); color: var(--ink); }
+  :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+}
+
+.font-display { letter-spacing: -0.02em; }
+
+.grain {
+  background-image: radial-gradient(rgba(0,0,0,0.04) 1px, transparent 1px);
+  background-size: 4px 4px;
+}
+
+/* Tlačítka */
+.btn-primary { transition: transform .25s var(--ease-out), box-shadow .25s ease, background-color .2s ease; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 30px -10px rgba(11,11,10,0.35); }
+.btn-primary:active { transform: translateY(0) scale(.98); }
+.btn-secondary { transition: background-color .2s ease, border-color .2s ease; }
+
+/* Podtržený odkaz */
+.ulink { position: relative; }
+.ulink::after { content: ''; position: absolute; left: 0; right: 0; bottom: -3px; height: 2px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .35s var(--ease-out); }
+.ulink:hover::after { transform: scaleX(1); }
+
+/* Motiv silničního pruhu (karta v hero) */
+.road-stripe-light {
+  background: repeating-linear-gradient(90deg, rgba(250,250,247,.7) 0 30px, transparent 30px 60px);
+  height: 6px;
+  border-radius: 999px;
+}
+
+/* Rozbalovací nabídky v navigaci */
+.dd-panel {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 8px);
+  transition: opacity .25s var(--ease-out), transform .35s var(--ease-out), visibility 0s linear .25s;
+}
+.dd[data-open] .dd-panel {
+  opacity: 1; visibility: visible; transform: translate(-50%, 0);
+  transition: opacity .25s var(--ease-out), transform .35s var(--ease-out), visibility 0s;
+}
+.dd[data-open] .dd-chevron { transform: rotate(180deg); }
+@media (hover: hover) {
+  .dd:hover .dd-panel {
+    opacity: 1; visibility: visible; transform: translate(-50%, 0);
+    transition: opacity .25s var(--ease-out), transform .35s var(--ease-out), visibility 0s;
+  }
+  .dd:hover .dd-chevron { transform: rotate(180deg); }
+}
+
+/* FAQ (details/summary) */
+.faq summary { list-style: none; cursor: pointer; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq[open] .faq-icon { transform: rotate(45deg); }
+
+/* ===== Animace =====
+   Vše jen transform/opacity a jen při prefers-reduced-motion: no-preference. */
+@media (prefers-reduced-motion: no-preference) {
+  /* Vstup hero po načtení, postupně podle --i */
+  .enter { opacity: 0; animation: enter-up .9s var(--ease-out) forwards; animation-delay: calc(var(--i, 0) * 90ms + 80ms); }
+  @keyframes enter-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+
+  /* Zvýraznění slova „opravdu“ se natáhne po dopsání nadpisu */
+  .highlight-bar { transform: scaleX(0); transform-origin: left; animation: grow-x .8s var(--ease-out) .7s forwards; }
+  @keyframes grow-x { to { transform: scaleX(1); } }
+
+  /* Limetkový kruh v pozadí jemně „naskočí“ */
+  .hero-blob { animation: blob-in 1.2s var(--ease-out) both; }
+  @keyframes blob-in { from { opacity: 0; transform: scale(.85); } to { opacity: .9; transform: none; } }
+
+  /* Odhalení při scrollu (třídu .in přidává IntersectionObserver) */
+  .js .reveal { opacity: 0; transform: translateY(28px); transition: opacity .9s var(--ease-out), transform .9s var(--ease-out); }
+  .js .reveal.in { opacity: 1; transform: none; }
+  .reveal.delay-1 { transition-delay: .08s; }
+  .reveal.delay-2 { transition-delay: .16s; }
+  .reveal.delay-3 { transition-delay: .24s; }
+  .reveal.delay-4 { transition-delay: .32s; }
+
+  /* Kroky průběhu kurzu: linka se vybarví postupně zleva doprava */
+  .js .step .step-fill { transform: scaleX(0); transform-origin: left; transition: transform 1s var(--ease-out); }
+  .js .step.in .step-fill { transform: none; }
+  .step:nth-child(1) .step-fill { transition-delay: .3s; }
+  .step:nth-child(2) .step-fill { transition-delay: .6s; }
+  .step:nth-child(3) .step-fill { transition-delay: .9s; }
+  .step:nth-child(4) .step-fill { transition-delay: 1.2s; }
+
+  /* Fotky aut se při hoveru lehce přiblíží */
+  .zoom-img img { transition: transform 1s var(--ease-out); }
+  .zoom-img:hover img { transform: scale(1.04); }
+}
+
+/* Plynulé přechody mezi stránkami (View Transitions API, bez JavaScriptu).
+   Navigace má vlastní jméno, takže při přechodu zůstane na místě. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+  .site-nav { view-transition-name: site-nav; }
+  ::view-transition-old(root) { animation: vt-out .2s var(--ease-out) both; }
+  ::view-transition-new(root) { animation: vt-in .45s var(--ease-out) both; }
+  @keyframes vt-out { to { opacity: 0; } }
+  @keyframes vt-in { from { opacity: 0; transform: translateY(12px); } }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .btn-primary, .btn-primary:hover { transform: none; }
+}

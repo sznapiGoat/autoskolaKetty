@@ -1,0 +1,19 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Breadcrumbs from '../components/Breadcrumbs.astro'
+import Pricing from '../components/Pricing.astro'
+import CtaBand from '../components/CtaBand.astro'
+---
+
+<Layout
+  title="Ceník autoškoly 2025 | Autoškola KETTY"
+  description="Kompletní ceník Autoškoly KETTY: řidičák skupiny B v Praze od 22 900 Kč, na Čáslavsku od 16 900 Kč. Kondiční jízdy, vrácení ŘP, poplatky. Splátky od 3 000 Kč."
+>
+  <div class="[&>section]:pt-12 lg:[&>section]:pt-16 pt-[104px] lg:pt-[120px]">
+    <div class="max-w-7xl mx-auto px-5 lg:px-10">
+      <div class="enter"><Breadcrumbs items={[{ label: 'Ceník' }]} /></div>
+    </div>
+    <Pricing as="h1" />
+  </div>
+  <CtaBand />
+</Layout>

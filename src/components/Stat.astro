@@ -1,0 +1,57 @@
+---
+interface Props {
+  n: string
+  sub: string
+  href?: string
+}
+
+const { n, sub, href } = Astro.props
+const Tag = href ? 'a' : 'div'
+const linkProps = href ? { href, target: '_blank', rel: 'noopener' } : {}
+---
+
+<Tag {...linkProps} class:list={['reveal py-7 sm:px-8 sm:first:pl-0 flex items-center gap-4', href && 'group']}>
+  <div class="stat-num font-display text-[44px] lg:text-[56px] font-bold leading-none tracking-tight tabular-nums" data-value={n}>{n}</div>
+  <div class="text-[14px] text-black/65 leading-snug max-w-[160px]">
+    <slot name="icon" />
+    <span class:list={[href && 'underline decoration-black/20 underline-offset-4 group-hover:decoration-black']}>{sub}</span>
+  </div>
+</Tag>
+
+<script>
+  // Čísla se při prvním zobrazení napočítají od nuly. Bez animace zůstane výsledná hodnota z HTML.
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const els = document.querySelectorAll<HTMLElement>('.stat-num')
+
+  if (!reduce && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return
+        io.unobserve(entry.target)
+        const el = entry.target as HTMLElement
+        const raw = el.dataset.value!
+        const match = raw.match(/[\d\s,]+/)
+        if (!match) return
+        const numStr = match[0].trim()
+        const decimals = numStr.includes(',') ? numStr.split(',')[1].length : 0
+        const target = parseFloat(numStr.replace(/\s/g, '').replace(',', '.'))
+        const [prefix, suffix] = raw.split(numStr)
+        const fmt = new Intl.NumberFormat('cs-CZ', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })
+        // Zafixovat šířku, ať se text vedle čísla během počítání neposouvá
+        el.style.minWidth = `${el.offsetWidth}px`
+        const start = performance.now()
+        const duration = 1400
+
+        const tick = (now: number) => {
+          const t = Math.min((now - start) / duration, 1)
+          const eased = 1 - Math.pow(1 - t, 3)
+          el.textContent = prefix + fmt.format(target * eased).replace(/\s/g, ' ') + suffix
+          if (t < 1) requestAnimationFrame(tick)
+          else el.textContent = raw
+        }
+        requestAnimationFrame(tick)
+      })
+    }, { threshold: 0.6 })
+    els.forEach((el) => io.observe(el))
+  }
+</script>

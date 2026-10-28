@@ -1,0 +1,84 @@
+---
+import { ArrowRight, ArrowUpRight } from '@lucide/astro'
+import { courses } from '../data/courses'
+
+interface Props {
+  // Na podstránce /kurzy je nadpis sekce zároveň hlavním nadpisem stránky
+  as?: 'h1' | 'h2'
+  showPricingLink?: boolean
+}
+
+const { as: Heading = 'h2', showPricingLink = true } = Astro.props
+---
+
+<section id="kurzy" class="relative py-24 lg:py-32 bg-[var(--paper-2)] grain">
+  <div class="max-w-7xl mx-auto px-5 lg:px-10">
+    <div class="flex flex-wrap items-end justify-between gap-6 mb-14">
+      <Heading class="reveal max-w-2xl font-display font-bold text-[clamp(40px,5.5vw,76px)] leading-[0.95] tracking-tight">
+        Vyber si kategorii, zbytek řešíme my.
+      </Heading>
+      {showPricingLink && (
+        <a href="/cenik" class="reveal delay-1 inline-flex items-center gap-2 font-semibold text-[15px] ulink">
+          Celý ceník <ArrowRight size={15} />
+        </a>
+      )}
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
+      {courses.map((c, i) => {
+        const muted = c.featured ? 'text-white/55' : 'text-black/55'
+        return (
+          <div class={`reveal delay-${(i % 4) + 1}`}>
+            <article
+              class:list={[
+                'group h-full relative rounded-3xl p-7 flex flex-col min-h-[360px] transition-transform duration-300 ease-[var(--ease-out)] hover:-translate-y-1',
+                c.featured ? 'bg-[var(--ink)] text-white' : 'bg-white text-[var(--ink)]',
+              ]}
+            >
+              <div class="flex items-start justify-between mb-12">
+                <div class:list={['font-display font-bold text-[28px] px-3 py-1 rounded-lg', c.featured ? 'bg-[var(--lime)] text-[var(--ink)]' : 'bg-[var(--ink)] text-[var(--lime)]']}>
+                  {c.tag}
+                </div>
+                {c.featured && <span class="text-[13px] font-medium text-[var(--lime)]">Nejčastější</span>}
+              </div>
+
+              <h3 class="font-display font-bold text-[26px] leading-tight">
+                <!-- Odkaz roztažený přes celou kartu (::after), takže je klikací celá -->
+                <a href={c.href} class="after:absolute after:inset-0 after:rounded-3xl focus-visible:outline-none">{c.name}</a>
+              </h3>
+              <p class:list={['mt-2 text-[14px] leading-relaxed', c.featured ? 'text-white/70' : 'text-black/65']}>{c.cardDesc}</p>
+
+              <dl class:list={['mt-6 grid grid-cols-2 gap-3 pt-5 border-t', c.featured ? 'border-white/10' : 'border-black/10']}>
+                <div>
+                  <dt class={`text-[12px] ${muted}`}>Délka</dt>
+                  <dd class="text-[14px] font-semibold mt-0.5">{c.duration}</dd>
+                </div>
+                <div>
+                  <dt class={`text-[12px] ${muted}`}>Rozsah</dt>
+                  <dd class="text-[14px] font-semibold mt-0.5">{c.lessons}</dd>
+                </div>
+              </dl>
+
+              <div class="mt-auto pt-6 flex items-end justify-between">
+                <div>
+                  <div class={`text-[12px] ${muted}`}>od</div>
+                  <div class="font-display text-[28px] font-bold leading-none mt-0.5">
+                    {c.price} <span class={`text-[14px] font-medium ${muted}`}>Kč</span>
+                  </div>
+                </div>
+                <span
+                  aria-hidden="true"
+                  class:list={['w-11 h-11 rounded-full flex items-center justify-center transition-transform duration-300 group-hover:rotate-45', c.featured ? 'bg-[var(--lime)] text-[var(--ink)]' : 'bg-[var(--ink)] text-[var(--lime)]']}
+                >
+                  <ArrowUpRight size={18} />
+                </span>
+              </div>
+              <!-- Viditelný focus pro celou kartu při ovládání klávesnicí -->
+              <span aria-hidden="true" class="pointer-events-none absolute inset-0 rounded-3xl ring-2 ring-offset-4 ring-offset-[var(--paper-2)] ring-transparent group-has-[a:focus-visible]:ring-[var(--ink)]"></span>
+            </article>
+          </div>
+        )
+      })}
+    </div>
+  </div>
+</section>

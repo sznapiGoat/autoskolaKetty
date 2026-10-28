@@ -1,0 +1,65 @@
+---
+import '../styles/global.css'
+import Nav from '../components/Nav.astro'
+import Footer from '../components/Footer.astro'
+// Preload hlavních řezů písma (latin + latin-ext kvůli češtině)
+import bricolageLatin from '../assets/fonts/bricolage-latin-w90.woff2?url'
+import bricolageCz from '../assets/fonts/bricolage-cz-w90.woff2?url'
+import geistLatin from '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url'
+import geistLatinExt from '@fontsource-variable/geist/files/geist-latin-ext-wght-normal.woff2?url'
+
+const fonts = [bricolageLatin, bricolageCz, geistLatin, geistLatinExt]
+
+interface Props {
+  title: string
+  description: string
+}
+
+const { title, description } = Astro.props
+---
+
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#FAFAF7" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {fonts.map((href) => <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />)}
+    <meta name="generator" content={Astro.generator} />
+    <script is:inline>document.documentElement.classList.add('js')</script>
+  </head>
+  <body class="font-sans">
+    <a href="#obsah" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:bg-[var(--ink)] focus:text-[var(--lime)] focus:px-4 focus:py-2 focus:rounded-full">Přeskočit na obsah</a>
+    <div class="overflow-x-clip">
+      <Nav />
+      <main id="obsah">
+        <slot />
+      </main>
+      <Footer />
+    </div>
+
+    <script>
+      // Odhalení sekcí při scrollu
+      const els = document.querySelectorAll('.reveal')
+      if (!('IntersectionObserver' in window)) {
+        els.forEach((el) => el.classList.add('in'))
+      } else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) {
+                e.target.classList.add('in')
+                io.unobserve(e.target)
+              }
+            })
+          },
+          { threshold: 0.12, rootMargin: '0px 0px -40px 0px' },
+        )
+        els.forEach((el) => io.observe(el))
+      }
+    </script>
+  </body>
+</html>

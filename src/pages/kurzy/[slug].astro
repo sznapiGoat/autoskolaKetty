@@ -1,0 +1,14 @@
+---
+import CoursePage from '../../components/CoursePage.astro'
+import { courses } from '../../data/courses'
+
+export function getStaticPaths() {
+  return courses
+    .filter((c) => c.href.startsWith('/kurzy/'))
+    .map((course) => ({ params: { slug: course.slug }, props: { course } }))
+}
+
+const { course } = Astro.props
+---
+
+<CoursePage course={course} />

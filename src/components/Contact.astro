@@ -1,0 +1,171 @@
+---
+import { MapPin, Phone, Mail, Clock, ArrowRight, ArrowUpRight, Check } from '@lucide/astro'
+import ContactRow from './ContactRow.astro'
+import Field from './Field.astro'
+import Stars from './Stars.astro'
+import { site } from '../data/site'
+
+interface Props {
+  as?: 'h1' | 'h2'
+}
+
+const { as: Heading = 'h2' } = Astro.props
+const kurzy = ['B', 'A', 'C+E', '§39']
+---
+
+<section id="kontakt" class="relative py-24 lg:py-32 bg-[var(--paper-2)] grain">
+  <div class="max-w-7xl mx-auto px-5 lg:px-10">
+    <div class="reveal mb-14 max-w-3xl">
+      <Heading class="font-display font-bold text-[clamp(40px,5.5vw,76px)] leading-[0.95] tracking-tight">
+        Stav se,<br />nebo napiš.
+      </Heading>
+    </div>
+
+    <div class="grid lg:grid-cols-12 gap-5">
+      <div class="lg:col-span-5 reveal bg-[var(--ink)] text-white rounded-3xl p-8 lg:p-10 flex flex-col">
+        <div class="font-display font-bold text-[28px] leading-tight mb-8">Autoškola KETTY</div>
+
+        <div class="space-y-6 flex-1">
+          <ContactRow label="Náborová kancelář & učebna">
+            <MapPin slot="icon" size={16} />
+            Dopraváků 723, 184 00 Praha 8<br />
+            <span class="text-[13px] text-white/60">V areálu autobazaru AAA AUTO</span>
+          </ContactRow>
+          <ContactRow label="Pobočka Chotusice">
+            <MapPin slot="icon" size={16} />
+            Chotusice 136, 285 76<br />
+            <span class="text-[13px] text-white/60">Otevřeno nonstop</span>
+          </ContactRow>
+          <ContactRow label="Bc. Renáta Kettnerová">
+            <Phone slot="icon" size={16} />
+            <a href={site.phone.href} class="ulink">{site.phone.display}</a>
+          </ContactRow>
+          <ContactRow label="Martin Kettner">
+            <Phone slot="icon" size={16} />
+            <a href={site.phone2.href} class="ulink">{site.phone2.display}</a>
+          </ContactRow>
+          <ContactRow label="E-mail">
+            <Mail slot="icon" size={16} />
+            <a href={`mailto:${site.email}`} class="ulink break-all">{site.email}</a>
+          </ContactRow>
+          <ContactRow label="Úřední hodiny na učebně">
+            <Clock slot="icon" size={16} />
+            Út a Čt 14:00-18:00<br />
+            <span class="text-[13px] text-white/60">Jindy po telefonické domluvě</span>
+          </ContactRow>
+        </div>
+
+        <a
+          href={site.googleReviewsUrl}
+          target="_blank"
+          rel="noopener"
+          class="group mt-8 pt-8 border-t border-white/10 flex items-center gap-3"
+        >
+          <Stars size={14} class="text-[var(--lime)]" fill="fill-[var(--lime)]" />
+          <span class="text-[14px] text-white/70 group-hover:text-white transition-colors">{site.rating.value} z 5 na Google</span>
+          <ArrowUpRight size={15} class="text-white/50 transition-transform duration-300 group-hover:rotate-45 group-hover:text-white" />
+        </a>
+      </div>
+
+      <div class="lg:col-span-4 reveal delay-1 bg-[var(--lime)] rounded-3xl p-8 lg:p-10 flex flex-col">
+        <div class="font-display font-bold text-[28px] leading-tight mb-2">Nezávazná přihláška</div>
+        <p class="text-[14px] text-[var(--ink)]/75 mb-7">Otevře se ti e-mail s vyplněnou přihláškou. Ozveme se s nejbližším termínem.</p>
+
+        <form id="prihlaska" class="flex flex-col gap-5 flex-1 scroll-mt-48" novalidate>
+          <Field label="Jméno a příjmení" name="name" autocomplete="name" error="Vyplň prosím jméno a příjmení." />
+          <Field label="Telefon" name="phone" type="tel" autocomplete="tel" error="Zadej telefon, ať se ti můžeme ozvat." pattern="[+0-9 ]{9,}" />
+
+          <fieldset>
+            <legend class="text-[13px] font-medium text-[var(--ink)]/75 mb-2">Kurz</legend>
+            <div class="flex gap-2 flex-wrap">
+              {kurzy.map((k, i) => (
+                <label class="cursor-pointer">
+                  <input type="radio" name="course" value={k} checked={i === 0} class="peer sr-only" />
+                  <span class="block text-[14px] font-semibold px-4 py-2 rounded-full border-2 border-[var(--ink)]/25 transition-colors hover:border-[var(--ink)] peer-checked:bg-[var(--ink)] peer-checked:text-[var(--lime)] peer-checked:border-[var(--ink)] peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[var(--ink)]">
+                    {k}
+                  </span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+
+          <button type="submit" class="mt-auto inline-flex items-center justify-center gap-2 bg-[var(--ink)] text-[var(--lime)] font-semibold py-4 rounded-full btn-primary">
+            <span class="label-default inline-flex items-center gap-2">Odeslat přihlášku <ArrowRight size={16} /></span>
+            <span class="label-sent hidden items-center gap-2">Otevřeno v e-mailu <Check size={16} /></span>
+          </button>
+          <p class="form-status sr-only" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+
+      <div class="lg:col-span-3 reveal delay-2 rounded-3xl overflow-hidden bg-white border border-black/10 min-h-[420px] flex flex-col">
+        <iframe
+          title="Mapa: Dopraváků 723, Praha 8"
+          src="https://www.google.com/maps?q=Doprav%C3%A1k%C5%AF+723,+184+00+Praha+8&z=16&output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          class="flex-1 w-full min-h-[300px] border-0 grayscale-[0.4]"
+        ></iframe>
+        <a
+          href={site.mapsPraha}
+          target="_blank"
+          rel="noopener"
+          class="group p-5 flex items-center justify-between hover:bg-[var(--paper-2)] transition-colors"
+        >
+          <div>
+            <div class="text-[13px] text-black/55">Otevřít v Google Maps</div>
+            <div class="font-semibold text-[14px]">Dopraváků 723, Praha</div>
+          </div>
+          <ArrowUpRight size={18} class="transition-transform duration-300 group-hover:rotate-45" />
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { site } from '../data/site'
+
+  const form = document.getElementById('prihlaska') as HTMLFormElement
+  const status = form.querySelector('.form-status')!
+
+  // Předvyplnění kurzu z odkazu, např. /kontakt?kurz=A#prihlaska
+  const preset = new URLSearchParams(location.search).get('kurz')
+  if (preset) {
+    const radio = form.querySelector<HTMLInputElement>(`input[name="course"][value="${CSS.escape(preset)}"]`)
+    if (radio) radio.checked = true
+  }
+
+  const showError = (input: HTMLInputElement, show: boolean) => {
+    input.setAttribute('aria-invalid', String(show))
+    form.querySelector(`#${input.id}-error`)?.classList.toggle('hidden', !show)
+  }
+
+  // Chyba se ukáže až po opuštění pole nebo po odeslání, ne při psaní
+  form.querySelectorAll<HTMLInputElement>('input[data-field]').forEach((input) => {
+    input.addEventListener('blur', () => showError(input, !input.checkValidity()))
+    input.addEventListener('input', () => { if (input.checkValidity()) showError(input, false) })
+  })
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault()
+    const fields = [...form.querySelectorAll<HTMLInputElement>('input[data-field]')]
+    const invalid = fields.filter((f) => !f.checkValidity())
+    fields.forEach((f) => showError(f, invalid.includes(f)))
+    if (invalid.length) {
+      invalid[0].focus()
+      return
+    }
+
+    const data = new FormData(form)
+    const course = String(data.get('course'))
+    const subject = `Přihláška do kurzu ${course}`
+    const body = `Jméno: ${data.get('name')}\nTelefon: ${data.get('phone')}\nKurz: ${course}`
+    window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+
+    form.querySelector('.label-default')!.classList.add('hidden')
+    const sent = form.querySelector('.label-sent')!
+    sent.classList.remove('hidden')
+    sent.classList.add('inline-flex')
+    status.textContent = 'Přihláška se otevřela ve tvém e-mailu. Stačí ji odeslat.'
+  })
+</script>

@@ -1,0 +1,35 @@
+---
+import { ArrowRight, Phone } from '@lucide/astro'
+import { site } from '../data/site'
+
+interface Props {
+  title?: string
+  text?: string
+  href?: string
+}
+
+const {
+  title = 'Domluvíme první jízdu?',
+  text = 'Vyplň nezávaznou přihlášku nebo zavolej. Ozveme se s nejbližším termínem.',
+  href = '/kontakt#prihlaska',
+} = Astro.props
+---
+
+<section class="py-16 lg:py-24">
+  <div class="max-w-7xl mx-auto px-5 lg:px-10">
+    <div class="reveal rounded-[32px] bg-[var(--lime)] px-7 py-10 lg:px-14 lg:py-14 grid lg:grid-cols-12 gap-8 items-center">
+      <div class="lg:col-span-7">
+        <h2 class="font-display font-bold text-[clamp(32px,4vw,52px)] leading-[1] tracking-tight">{title}</h2>
+        <p class="mt-4 max-w-[52ch] text-[16px] text-[var(--ink)]/75 leading-relaxed">{text}</p>
+      </div>
+      <div class="lg:col-span-5 flex flex-wrap lg:justify-end gap-3">
+        <a href={href} class="btn-primary inline-flex items-center gap-2 bg-[var(--ink)] text-[var(--lime)] font-semibold text-[15px] px-7 py-4 rounded-full">
+          Zapsat se <ArrowRight size={17} />
+        </a>
+        <a href={site.phone.href} class="btn-secondary inline-flex items-center gap-2 text-[15px] font-semibold px-6 py-4 rounded-full border-2 border-[var(--ink)]/20 hover:border-[var(--ink)]">
+          <Phone size={16} /> {site.phone.display}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

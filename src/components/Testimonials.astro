@@ -1,0 +1,65 @@
+---
+import { ArrowUpRight } from '@lucide/astro'
+import Stars from './Stars.astro'
+import { site } from '../data/site'
+
+const featured = {
+  name: 'Vojta K.', age: 22, course: 'Skupina B + EXPRES',
+  text: '„Šel jsem sem po neúspěchu v jiné autoškole a tady mě konečně naučili jezdit. Hodně si vážím přístupu instruktorů.“',
+}
+
+const items = [
+  {
+    name: 'Tereza N.', age: 19, course: 'Skupina B',
+    text: '„Měla jsem strach z parkování, ale po pár hodinách jsem to dala napoprvé. Nikdy na mě nikdo nekřičel.“',
+  },
+  {
+    name: 'Klára S.', age: 24, course: 'Skupina A2',
+    text: '„Flexibilní termíny, super komunikace přes WhatsApp a moderní auta. Doporučuju každému, kdo to chce mít rychle hotové.“',
+  },
+]
+---
+
+<section id="recenze" class="relative py-24 lg:py-32 bg-[var(--paper-2)] grain overflow-hidden">
+  <div class="max-w-7xl mx-auto px-5 lg:px-10">
+    <div class="reveal mb-14">
+      <h2 class="font-display font-bold text-[clamp(40px,5.5vw,76px)] leading-[0.95] tracking-tight max-w-[14ch]">
+        {site.rating.value} z&nbsp;5 napříč {site.rating.count}&nbsp;recenzemi.
+      </h2>
+      <a
+        href={site.googleReviewsUrl}
+        target="_blank"
+        rel="noopener"
+        class="group mt-6 inline-flex items-center gap-3 bg-white border border-black/10 rounded-full pl-4 pr-3 py-2 hover:border-[var(--ink)] transition-colors"
+      >
+        <Stars size={16} class="text-[var(--ink)]" fill="fill-[var(--lime)]" />
+        <span class="text-[14px] font-medium">Všechny recenze na Google</span>
+        <ArrowUpRight size={16} class="transition-transform duration-300 group-hover:rotate-45" />
+      </a>
+    </div>
+
+    <div class="grid lg:grid-cols-12 gap-5">
+      <article class="reveal delay-1 lg:col-span-7 bg-[var(--lime)] rounded-3xl p-8 lg:p-12 flex flex-col min-h-[380px]">
+        <Stars size={18} class="text-[var(--ink)]" fill="fill-[var(--ink)]" />
+        <p class="mt-8 font-display font-bold text-[clamp(26px,2.8vw,38px)] leading-[1.15] tracking-tight">{featured.text}</p>
+        <div class="mt-auto pt-10">
+          <div class="font-semibold text-[16px]">{featured.name}, {featured.age}</div>
+          <div class="text-[14px] text-[var(--ink)]/65">{featured.course}</div>
+        </div>
+      </article>
+
+      <div class="lg:col-span-5 grid gap-5">
+        {items.map((it, i) => (
+          <article class:list={[`reveal delay-${i + 2} rounded-3xl p-7 flex flex-col`, i === 0 ? 'bg-[var(--ink)] text-white' : 'bg-white border border-black/5']}>
+            <Stars size={16} class={i === 0 ? 'text-[var(--lime)]' : 'text-[var(--ink)]'} fill={i === 0 ? 'fill-[var(--lime)]' : 'fill-[var(--ink)]'} />
+            <p class="mt-5 font-display text-[19px] leading-snug">{it.text}</p>
+            <div class="mt-6">
+              <div class="font-semibold text-[14px]">{it.name}, {it.age}</div>
+              <div class:list={['text-[13px]', i === 0 ? 'text-white/55' : 'text-black/55']}>{it.course}</div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

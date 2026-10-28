@@ -1,0 +1,23 @@
+---
+import { Plus } from '@lucide/astro'
+
+interface Props {
+  items: { q: string; a: string }[]
+}
+
+const { items } = Astro.props
+---
+
+<div class="divide-y divide-black/10 border-y border-black/10">
+  {items.map((it) => (
+    <details class="faq group">
+      <summary class="flex items-center justify-between gap-6 py-5 font-display font-bold text-[19px] lg:text-[21px] leading-snug">
+        {it.q}
+        <span class="faq-icon w-9 h-9 rounded-full border-2 border-[var(--ink)]/15 flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:border-[var(--ink)]">
+          <Plus size={16} />
+        </span>
+      </summary>
+      <p class="pb-6 -mt-1 max-w-[65ch] text-[16px] text-black/70 leading-relaxed">{it.a}</p>
+    </details>
+  ))}
+</div>

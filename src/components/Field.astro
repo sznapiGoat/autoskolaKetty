@@ -1,0 +1,29 @@
+---
+interface Props {
+  label: string
+  name: string
+  type?: string
+  autocomplete?: string
+  error: string
+  pattern?: string
+}
+
+const { label, name, type = 'text', autocomplete, error, pattern } = Astro.props
+const id = `f-${name}`
+---
+
+<div>
+  <label for={id} class="text-[13px] font-medium text-[var(--ink)]/75 block mb-1">{label}</label>
+  <input
+    id={id}
+    name={name}
+    type={type}
+    autocomplete={autocomplete}
+    pattern={pattern}
+    required
+    data-field
+    aria-describedby={`${id}-error`}
+    class="w-full bg-transparent border-b-2 border-[var(--ink)]/30 focus:border-[var(--ink)] focus-visible:outline-none py-2 text-[16px] font-medium aria-[invalid=true]:border-[#9B1C1C]"
+  />
+  <p id={`${id}-error`} class="hidden mt-1.5 text-[13px] font-medium text-[#7A1414]">{error}</p>
+</div>
